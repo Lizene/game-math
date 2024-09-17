@@ -10,6 +10,7 @@ public class CraneRotation : MonoBehaviour
     void Start()
     {
         trolleyMovement = trolley.GetComponent<TrolleyMovement>();
+        trolleyMovement.SetCranePosition(transform.position);
     }
 
     void Update()
@@ -19,6 +20,6 @@ public class CraneRotation : MonoBehaviour
     public void Rotate(int dir)
     {
         transform.Rotate(Vector3.up, dir * angleSpeed * Time.deltaTime);
-        trolleyMovement.UpdateTransform(transform.position, transform.forward);
+        trolleyMovement.UpdateTransform(-transform.right);
     }
 }
