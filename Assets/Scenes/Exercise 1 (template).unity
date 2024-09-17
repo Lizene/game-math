@@ -790,6 +790,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5045360659552153424, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
+      propertyPath: hook
+      value: 
+      objectReference: {fileID: 8658184023392465618}
+    - target: {fileID: 5045360659552153424, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
+      propertyPath: cable
+      value: 
+      objectReference: {fileID: 8658184023392465630}
+    - target: {fileID: 5045360659552153424, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
+      propertyPath: crane
+      value: 
+      objectReference: {fileID: 8658184023392465626}
+    - target: {fileID: 5045360659552153424, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
+      propertyPath: trolley
+      value: 
+      objectReference: {fileID: 8658184023392465616}
     - target: {fileID: 6779775907023255500, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
       propertyPath: m_Name
       value: UI
@@ -837,7 +853,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8658184023392465626}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000008146034, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -885,6 +901,7 @@ GameObject:
   - component: {fileID: 8658184023392300784}
   - component: {fileID: 8658184023395725022}
   - component: {fileID: 8658184023394724894}
+  - component: {fileID: 8658184023395725023}
   m_Layer: 0
   m_Name: Trolley
   m_TagString: Untagged
@@ -923,6 +940,7 @@ GameObject:
   - component: {fileID: 8658184023392300794}
   - component: {fileID: 8658184023395725016}
   - component: {fileID: 8658184023394724888}
+  - component: {fileID: 8658184023395725017}
   m_Layer: 0
   m_Name: Tower Crane
   m_TagString: Untagged
@@ -1240,6 +1258,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8658184023392465626}
   m_Mesh: {fileID: 4300006, guid: b75ef94dd86ecb34eb9e252b92b6761c, type: 3}
+--- !u!114 &8658184023395725017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8658184023392465626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 607046468a9c4804bae6058cbdcd075c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trolley: {fileID: 8658184023392465616}
+  angleSpeed: 50
 --- !u!33 &8658184023395725018
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1264,6 +1296,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8658184023392465616}
   m_Mesh: {fileID: 4300000, guid: b75ef94dd86ecb34eb9e252b92b6761c, type: 3}
+--- !u!114 &8658184023395725023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8658184023392465616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56cba795b0d32e846b5103431790d976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8685051053018706934
 PrefabInstance:
   m_ObjectHideFlags: 0
