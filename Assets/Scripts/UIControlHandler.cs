@@ -8,11 +8,12 @@ public class UIControlHandler : MonoBehaviour
     public GameObject crane, trolley, cable, hook;
     CraneRotation craneRotation;
     TrolleyMovement trolleyMovement;
+    HookMovement hookMovement;
     void Start()
     {
         craneRotation = crane.GetComponent<CraneRotation>();
         trolleyMovement = trolley.GetComponent<TrolleyMovement>();
-
+        hookMovement = hook.GetComponent<HookMovement>();
     }
     public void RotateCraneClockwise()
     {
@@ -29,7 +30,7 @@ public class UIControlHandler : MonoBehaviour
 
     public void SetCableLength(float value)
     {
-        Debug.Log("Cable: "+value.ToString());
+        hookMovement.SetHookHeight(value);
 
     }
     void Update()

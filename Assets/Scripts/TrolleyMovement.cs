@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class TrolleyMovement : MonoBehaviour
 {
-    public GameObject nearLimitObject, farLimitObject;
+    public GameObject nearLimitObject, farLimitObject, hook;
+    HookMovement hookMovement;
     float nearRadius, farRadius;
     float posY;
     Vector3 cranePosition, craneUpperCenter;
+    Quaternion defaultOrientation = Quaternion.Euler(0, 90f, 0);
     void Start()
     {
-        
+        hookMovement = hook.GetComponent<HookMovement>();
     }
-    public void SetCranePosition(Vector3 position)
+    public void InitCranePosition(Vector3 position)
     {
         posY = transform.position.y;
 
@@ -28,11 +30,13 @@ public class TrolleyMovement : MonoBehaviour
     {
         float distanceFromCrane = Vector3.Distance(craneUpperCenter,transform.position);
         transform.position = craneUpperCenter+craneForward * distanceFromCrane;
-        transform.rotation = Quaternion.Euler(0,90f,0)*Quaternion.LookRotation(craneForward);
+        transform.rotation = defaultOrientation*Quaternion.LookRotation(craneForward);
+        hookMovement.UpdateTransform(transform.position, transform.rotation);
     }
     public void SetPosition(float percentage)
     {
         Vector3 fromCenterNormalized = (transform.position - craneUpperCenter).normalized;
         transform.position = craneUpperCenter+fromCenterNormalized * Mathf.Lerp(nearRadius,farRadius, percentage);
+        hookMovement.UpdateTransform(transform.position, transform.rotation);
     }
 }

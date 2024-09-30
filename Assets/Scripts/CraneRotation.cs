@@ -10,7 +10,7 @@ public class CraneRotation : MonoBehaviour
     void Start()
     {
         trolleyMovement = trolley.GetComponent<TrolleyMovement>();
-        trolleyMovement.SetCranePosition(transform.position);
+        trolleyMovement.InitCranePosition(transform.position);
     }
 
     void Update()
