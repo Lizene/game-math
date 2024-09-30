@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public class HookMovement : MonoBehaviour
 {
     public GameObject cable;
-    public GameObject hookedObject;
+    GameObject hookedObject;
     public float cableMaxScale, cableMinScale;
     public float cableMaxHeight, cableMinHeight;
     public float attachPointHeight;
@@ -15,7 +15,7 @@ public class HookMovement : MonoBehaviour
     float cableStartY;
     float extensionPercent;
     float cableMovementRange;
-    Quaternion hookDefaultOrientation, cableDefaultOrientation;
+    Quaternion hookDefaultOrientation, cableDefaultOrientation, hookedObjectDefaultOrientation;
     void Start()
     {
         cableStartY = cable.transform.position.y;
@@ -28,11 +28,6 @@ public class HookMovement : MonoBehaviour
         //transform.position = startPos + extensionPercent * cableMovementRange * Vector3.down;
     }
 
-    void Update()
-    {
-        
-    }
-
     public void UpdateTransform(Vector3 position, Quaternion rotation)
     {
         Vector3 startPos = new Vector3(position.x, cableMaxHeight, position.z);
@@ -40,6 +35,9 @@ public class HookMovement : MonoBehaviour
         transform.rotation = hookDefaultOrientation*rotation;
         cable.transform.position = new Vector3(transform.position.x, cableStartY, transform.position.z);
         cable.transform.rotation = cableDefaultOrientation * rotation;
+        if (hookedObject is null) return;
+        hookedObject.transform.position = transform.position + Vector3.up * attachPointHeight;
+        hookedObject.transform.rotation = hookedObjectDefaultOrientation * rotation;
     }
     public void SetHookHeight(float percentage)
     {
@@ -50,5 +48,14 @@ public class HookMovement : MonoBehaviour
         cable.transform.rotation = cableDefaultOrientation * 
             Quaternion.Inverse(hookDefaultOrientation) * transform.rotation;
         cable.transform.localScale = new Vector3(1, cableMinScale + extensionPercent * cableScaleRange, 1);
+        if (hookedObject is null) return;
+        hookedObject.transform.position = transform.position + Vector3.up * attachPointHeight;
+
+    }
+
+    public void AttachObject(GameObject go)
+    {
+        hookedObject = go;
+        hookedObjectDefaultOrientation = go.transform.rotation;
     }
 }

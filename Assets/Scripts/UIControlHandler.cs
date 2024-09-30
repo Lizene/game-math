@@ -30,7 +30,7 @@ public class UIControlHandler : MonoBehaviour
 
     public void SetCableLength(float value)
     {
-        hookMovement.SetHookHeight(value);
+        hookMovement.SetHookHeight(1-value);
 
     }
     void Update()
