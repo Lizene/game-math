@@ -1,3 +1,5 @@
+# I did all the mechanics
+
 # Exercise 1
 
 ### Definition:
