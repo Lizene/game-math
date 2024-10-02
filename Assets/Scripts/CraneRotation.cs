@@ -12,11 +12,6 @@ public class CraneRotation : MonoBehaviour
         trolleyMovement = trolley.GetComponent<TrolleyMovement>();
         trolleyMovement.InitCranePosition(transform.position);
     }
-
-    void Update()
-    {
-        
-    }
     public void Rotate(int dir)
     {
         transform.Rotate(Vector3.up, dir * angleSpeed * Time.deltaTime);

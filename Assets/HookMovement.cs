@@ -24,10 +24,7 @@ public class HookMovement : MonoBehaviour
         cableMovementRange = cableMaxHeight - cableMinHeight;
         cableScaleRange = cableMaxScale - cableMinScale;
         extensionPercent =  (cableMaxHeight - transform.position.y) / cableMovementRange;
-        //Vector3 startPos = new Vector3(transform.position.x, cableMaxHeight, transform.position.z);
-        //transform.position = startPos + extensionPercent * cableMovementRange * Vector3.down;
     }
-
     public void UpdateTransform(Vector3 position, Quaternion rotation)
     {
         Vector3 startPos = new Vector3(position.x, cableMaxHeight, position.z);
@@ -50,9 +47,7 @@ public class HookMovement : MonoBehaviour
         cable.transform.localScale = new Vector3(1, cableMinScale + extensionPercent * cableScaleRange, 1);
         if (hookedObject is null) return;
         hookedObject.transform.position = transform.position + Vector3.up * attachPointHeight;
-
     }
-
     public void AttachObject(GameObject go)
     {
         hookedObject = go;

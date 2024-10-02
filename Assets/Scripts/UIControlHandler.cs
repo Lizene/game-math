@@ -27,14 +27,8 @@ public class UIControlHandler : MonoBehaviour
     {
         trolleyMovement.SetPosition(value);
     }
-
     public void SetCableLength(float value)
     {
         hookMovement.SetHookHeight(1-value);
-
-    }
-    void Update()
-    {
-        
     }
 }
