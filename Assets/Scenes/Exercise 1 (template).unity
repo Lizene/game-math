@@ -647,9 +647,9 @@ Transform:
   m_GameObject: {fileID: 6023892515792707295}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -16, y: 10, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 14.84, y: 10, z: -7}
+  m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -664,9 +664,10 @@ GameObject:
   - component: {fileID: 6023892515792536319}
   - component: {fileID: 6023892515789636319}
   - component: {fileID: 6023892515790766111}
-  - component: {fileID: 6023892515792707297}
-  - component: {fileID: 6023892515792707298}
+  - component: {fileID: 6023892515792707300}
+  - component: {fileID: 6023892515792707302}
   - component: {fileID: 6023892515792707299}
+  - component: {fileID: 6023892515792707301}
   m_Layer: 0
   m_Name: Concrete
   m_TagString: Untagged
@@ -674,7 +675,52 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!135 &6023892515792707297
+--- !u!114 &6023892515792707299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023892515792707295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dc54678a71c5044facfb84944f30ada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &6023892515792707300
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023892515792707295}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 32
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.631242, y: 1.8853477, z: 7.1714435}
+  m_Center: {x: 0, y: -5.7159576, z: -1.7024522e-14}
+--- !u!114 &6023892515792707301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023892515792707295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b373e28674db0ed4697fb3f04818bc78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!135 &6023892515792707302
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -693,32 +739,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.29879212
-  m_Center: {x: 0, y: -0.12, z: 9.679056e-16}
---- !u!114 &6023892515792707298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023892515792707295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b373e28674db0ed4697fb3f04818bc78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6023892515792707299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023892515792707295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dc54678a71c5044facfb84944f30ada, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Radius: 0.3
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &6208831963816882321
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1342,7 +1364,6 @@ MonoBehaviour:
   cableMaxHeight: 40
   cableMinHeight: 4
   attachPointHeight: -2.75
-  sequenceActive: 0
 --- !u!33 &8658184023395725016
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1364,9 +1385,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trolley: {fileID: 8658184023392465616}
-  maxAngleSpeed: 20
-  sequenceActive: 0
-  concretePosition: {x: 0, y: 0, z: 0}
+  maxAngleSpeed: 35
+  accelerationMultiplier: 6
 --- !u!33 &8658184023395725018
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1406,7 +1426,6 @@ MonoBehaviour:
   nearLimitObject: {fileID: 601031389}
   farLimitObject: {fileID: 363527138}
   hook: {fileID: 8658184023392465618}
-  sequenceActive: 0
 --- !u!1001 &8685051053018706934
 PrefabInstance:
   m_ObjectHideFlags: 0

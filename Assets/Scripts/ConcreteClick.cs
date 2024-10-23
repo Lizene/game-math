@@ -12,8 +12,7 @@ public class ConcreteClick : MonoBehaviour
 
     void OnMouseDown()
     {
-        Debug.Log("UOHRGbnöbswerö");
 
-        handler.PerformRelocationSequence(transform.position);
+        handler.PerformRelocationSequence(gameObject);
     }
 }

@@ -1,25 +1,29 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class HookMovement : MonoBehaviour
 {
     public GameObject cable;
-    GameObject hookedObject;
+    GameObject hookedConcrete;
+    [NonSerialized] public UIControlHandler handler;
     public float cableMaxScale, cableMinScale;
     public float cableMaxHeight, cableMinHeight;
     public float attachPointHeight;
     float cableScaleRange;
     float cableStartY;
-    float goalPercentage = 1f, currentPercentage = 1f;
+    private bool sequence4Commenced;
+    float goalPercentage = 0f, currentPercentage = 0f;
     float cableMovementRange;
-    Quaternion hookDefaultOrientation, cableDefaultOrientation, hookedObjectDefaultOrientation;
-    public bool sequenceActive;
+    Quaternion hookDefaultOrientation, cableDefaultOrientation, hookedConcreteDefaultOrientation;
+    private bool sequence3Commenced;
 
     void Start()
     {
+        handler = GameObject.FindWithTag("UIHandler").GetComponent<UIControlHandler>();
         cableStartY = cable.transform.position.y;
         hookDefaultOrientation = transform.rotation;
         cableDefaultOrientation = cable.transform.rotation;
@@ -34,36 +38,73 @@ public class HookMovement : MonoBehaviour
         transform.rotation = hookDefaultOrientation*rotation;
         cable.transform.position = new Vector3(transform.position.x, cableStartY, transform.position.z);
         cable.transform.rotation = cableDefaultOrientation * rotation;
-        if (hookedObject is null) return;
-        hookedObject.transform.position = transform.position + Vector3.up * attachPointHeight;
-        hookedObject.transform.rotation = hookedObjectDefaultOrientation * rotation;
+        if (hookedConcrete is null) return;
+        hookedConcrete.transform.position = transform.position + Vector3.up * attachPointHeight;
+        hookedConcrete.transform.rotation = hookedConcreteDefaultOrientation * rotation;
     }
     public void SetPercentage(float percentage)
     {
-        if (sequenceActive) return;
+        if (handler.sequenceActive) return;
 
         goalPercentage = percentage;
         
     }
     public void AttachObject(GameObject go)
     {
-        hookedObject = go;
-        hookedObjectDefaultOrientation = go.transform.rotation;
+        hookedConcrete = go;
+        hookedConcreteDefaultOrientation = go.transform.rotation;
     }
     private void Update()
     {
-        SetHookHeight();
+        LerpHookHeight();
     }
-    void SetHookHeight()
+    void LerpHookHeight()
     {
-        currentPercentage = Mathf.SmoothStep(currentPercentage, goalPercentage, 0.03f);
+        if (Mathf.Abs(currentPercentage - goalPercentage) < 0.01f)
+        {
+            if (!handler.sequenceActive) return;
+            if (sequence3Commenced)
+            {
+                sequence3Commenced = false;
+                handler.WaitForSequenceStep4();
+            }
+            else if (sequence4Commenced)
+            {
+                sequence4Commenced = false;
+                handler.SequenceStep5();
+            }
+            return;
+        }
+        currentPercentage = Mathf.Lerp(currentPercentage, goalPercentage, 0.005f);
+
         Vector3 startPos = new Vector3(transform.position.x, cableMaxHeight, transform.position.z);
         transform.position = startPos + currentPercentage * cableMovementRange * Vector3.down;
         cable.transform.position = new Vector3(transform.position.x, cableStartY, transform.position.z);
+
         cable.transform.rotation = cableDefaultOrientation *
             Quaternion.Inverse(hookDefaultOrientation) * transform.rotation;
+
         cable.transform.localScale = new Vector3(1, cableMinScale + currentPercentage * cableScaleRange, 1);
-        if (hookedObject is null) return;
-        hookedObject.transform.position = transform.position + Vector3.up * attachPointHeight;
+        if (hookedConcrete is null) return;
+
+        hookedConcrete.transform.position = transform.position + Vector3.up * attachPointHeight;
+    }
+
+    public void SequenceStep3()
+    {
+        sequence3Commenced = true;
+        float concreteHeight = handler.concretePosition.y;
+        float concretePercentage = 1-Mathf.InverseLerp(cableMinHeight, cableMaxHeight, concreteHeight-attachPointHeight+0.05f);
+        goalPercentage = concretePercentage;
+    }
+
+    public void SequenceStep4()
+    {
+        sequence4Commenced = true;
+        goalPercentage = 0;
+    }
+    public void DetachConcrete()
+    {
+        hookedConcrete = null;
     }
 }

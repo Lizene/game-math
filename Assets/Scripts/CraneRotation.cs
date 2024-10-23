@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -6,27 +7,21 @@ using UnityEngine;
 public class CraneRotation : MonoBehaviour
 {
     public GameObject trolley;
-    TrolleyMovement trolleyMovement;
-    UIControlHandler handler;
     public float maxAngleSpeed;
-    float currentAngleSpeed = 0;
-    float accelerationMultiplier = 6;
+    public float accelerationMultiplier = 5;
+    [NonSerialized] public UIControlHandler handler;
+    TrolleyMovement trolleyMovement;
+    float currentAngularVelocity = 0;
     float acceleration;
-    bool buttonHeld, buttonHeldThisFrame;
+    float sequenceGoalAngle, currentSequenceAngle;
     int currentAccelerationDir;
-    public bool sequenceActive;
     bool sequenceCommenced;
-    public Vector3 concretePosition;
-    Vector2 crane2Dpos;
-    private float startAngle;
-    private float goalAngle;
-    float sequenceT;
-    float sequenceRotationSpeed = 1/4f;
+    bool buttonHeld, buttonHeldThisFrame;
+    [NonSerialized] public Vector2 crane2Dpos;
 
     void Start()
     {
         crane2Dpos = new Vector2(transform.position.x, transform.position.z);
-
         handler = GameObject.FindWithTag("UIHandler").GetComponent<UIControlHandler>();
         acceleration = maxAngleSpeed * accelerationMultiplier;
         trolleyMovement = trolley.GetComponent<TrolleyMovement>();
@@ -35,26 +30,17 @@ public class CraneRotation : MonoBehaviour
 
     public void Rotate(int dir)
     {
-        if (sequenceActive) return;
+        if (handler.sequenceActive) return;
         buttonHeldThisFrame = true;
         currentAccelerationDir = dir;
         
     }
+    
     void Update()
     {
         if (sequenceCommenced)
         {
-            float currentSequenceAngle = Mathf.LerpAngle(startAngle, goalAngle, sequenceT);
-            transform.rotation = Quaternion.AngleAxis(currentSequenceAngle,Vector3.up);
-            trolleyMovement.UpdateTransform(-transform.right);
-            sequenceT += Time.deltaTime * sequenceRotationSpeed;
-            if (sequenceT >= 1f)
-            {
-                sequenceCommenced = false;
-                sequenceT = 0f;
-                handler.SequenceStep2();
-            }
-
+            SequenceStep1Rotation();
             return;
         }
         Acceleration();
@@ -65,12 +51,12 @@ public class CraneRotation : MonoBehaviour
         if (buttonHeld)
         {
             //Accelerate
-            if (Mathf.Abs(currentAngleSpeed) < maxAngleSpeed)
+            if (Mathf.Abs(currentAngularVelocity) < maxAngleSpeed)
             {
-                currentAngleSpeed += acceleration*currentAccelerationDir * Time.deltaTime;
-                if (currentAngleSpeed > maxAngleSpeed)
+                currentAngularVelocity += acceleration*currentAccelerationDir * Time.deltaTime;
+                if (currentAngularVelocity > maxAngleSpeed)
                 {
-                    currentAngleSpeed = maxAngleSpeed;
+                    currentAngularVelocity = maxAngleSpeed;
                 }
             }
 
@@ -80,12 +66,12 @@ public class CraneRotation : MonoBehaviour
         else
         {
             //Decelerate
-            if (Mathf.Abs(currentAngleSpeed) > 0)
+            if (Mathf.Abs(currentAngularVelocity) > 0)
             {
-                currentAngleSpeed += acceleration * (currentAngleSpeed > 0 ? -1 : 1f) * Time.deltaTime;
-                if (Mathf.Abs(currentAngleSpeed) < 0.01f)
+                currentAngularVelocity += acceleration * (currentAngularVelocity > 0 ? -1 : 1f) * Time.deltaTime;
+                if (Mathf.Abs(currentAngularVelocity) < 0.01f)
                 {
-                    currentAngleSpeed = 0;
+                    currentAngularVelocity = 0;
                 }
             }
         }
@@ -93,9 +79,9 @@ public class CraneRotation : MonoBehaviour
     }
     void Rotation()
     {
-        if (Mathf.Abs(currentAngleSpeed) > 0)
+        if (Mathf.Abs(currentAngularVelocity) > 0)
         {
-            transform.Rotate(Vector3.up, currentAngleSpeed * Time.deltaTime);
+            transform.Rotate(Vector3.up, currentAngularVelocity * Time.deltaTime);
             trolleyMovement.UpdateTransform(-transform.right);
         }
     }
@@ -108,18 +94,34 @@ public class CraneRotation : MonoBehaviour
     public void SequenceStep1()
     {
         //Wait for the crane to decelerate fully
-        if (Mathf.Abs(currentAngleSpeed) > 0.01f)
+        if (Mathf.Abs(currentAngularVelocity) > 0.01f)
         {
             Invoke("SequenceStep1", 0.1f);
             return;
         }
-        currentAngleSpeed = 0f;
+        currentAngularVelocity = 0f;
         sequenceCommenced = true;
 
+        Vector3 concretePosition = handler.concretePosition;
         Vector2 concrete2Dpos = new Vector2(concretePosition.x, concretePosition.z);
         Vector2 craneToConcrete = concrete2Dpos-crane2Dpos;
-        startAngle = transform.rotation.y;
-        goalAngle = Vector2.SignedAngle(Vector2.right, craneToConcrete);
+        currentSequenceAngle = transform.eulerAngles.y;
+        sequenceGoalAngle = (Vector2.SignedAngle(craneToConcrete, Vector2.left) +360f)%360f;
+    }
+    void SequenceStep1Rotation()
+    {
+        currentSequenceAngle = Mathf.SmoothDampAngle(currentSequenceAngle, sequenceGoalAngle,
+            ref currentAngularVelocity, 0.3f, maxAngleSpeed);
+        transform.rotation = Quaternion.AngleAxis(currentSequenceAngle, Vector3.up);
 
+        trolleyMovement.UpdateTransform(-transform.right);
+        if (Mathf.Abs(currentAngularVelocity) < 0.01f)
+        {
+            currentAngularVelocity = 0;
+            currentSequenceAngle = 0; sequenceGoalAngle = 0;
+            sequenceCommenced = false;
+
+            handler.SequenceStep2();
+        }
     }
 }
