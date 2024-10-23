@@ -716,7 +716,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6023892515792707295}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18581be01dff0274bbadb42e97d5d67b, type: 3}
+  m_Script: {fileID: 11500000, guid: 6dc54678a71c5044facfb84944f30ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &6208831963816882321
@@ -1342,6 +1342,7 @@ MonoBehaviour:
   cableMaxHeight: 40
   cableMinHeight: 4
   attachPointHeight: -2.75
+  sequenceActive: 0
 --- !u!33 &8658184023395725016
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1364,6 +1365,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trolley: {fileID: 8658184023392465616}
   maxAngleSpeed: 20
+  sequenceActive: 0
+  concretePosition: {x: 0, y: 0, z: 0}
 --- !u!33 &8658184023395725018
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1403,6 +1406,7 @@ MonoBehaviour:
   nearLimitObject: {fileID: 601031389}
   farLimitObject: {fileID: 363527138}
   hook: {fileID: 8658184023392465618}
+  sequenceActive: 0
 --- !u!1001 &8685051053018706934
 PrefabInstance:
   m_ObjectHideFlags: 0

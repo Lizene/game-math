@@ -33,6 +33,14 @@ public class UIControlHandler : MonoBehaviour
     }
     public void PerformRelocationSequence(Vector3 concretePosition)
     {
-        
+        craneRotation.sequenceActive = true;
+        trolleyMovement.sequenceActive = true;
+        hookMovement.sequenceActive = true;
+        craneRotation.concretePosition = concretePosition;
+        craneRotation.SequenceStep1();
+    }
+    public void SequenceStep2()
+    {
+
     }
 }

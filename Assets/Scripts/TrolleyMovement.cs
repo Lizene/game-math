@@ -12,6 +12,8 @@ public class TrolleyMovement : MonoBehaviour
     Vector3 cranePosition, craneUpperCenter;
     Quaternion defaultOrientation = Quaternion.Euler(0, 90f, 0);
     float goalPercentage = 1f, currentPercentage = 1f;
+    public bool sequenceActive;
+
     void Start()
     {
         hookMovement = hook.GetComponent<HookMovement>();
@@ -34,6 +36,7 @@ public class TrolleyMovement : MonoBehaviour
     }
     public void SetPercentage(float percentage)
     {
+        if (sequenceActive) return;
         goalPercentage = percentage;
     }
     private void Update()

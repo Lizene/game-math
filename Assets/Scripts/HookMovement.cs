@@ -16,6 +16,8 @@ public class HookMovement : MonoBehaviour
     float goalPercentage = 1f, currentPercentage = 1f;
     float cableMovementRange;
     Quaternion hookDefaultOrientation, cableDefaultOrientation, hookedObjectDefaultOrientation;
+    public bool sequenceActive;
+
     void Start()
     {
         cableStartY = cable.transform.position.y;
@@ -38,6 +40,8 @@ public class HookMovement : MonoBehaviour
     }
     public void SetPercentage(float percentage)
     {
+        if (sequenceActive) return;
+
         goalPercentage = percentage;
         
     }
