@@ -31,4 +31,8 @@ public class UIControlHandler : MonoBehaviour
     {
         hookMovement.SetHookHeight(1-value);
     }
+    public void PerformRelocationSequence(Vector3 concretePosition)
+    {
+        
+    }
 }

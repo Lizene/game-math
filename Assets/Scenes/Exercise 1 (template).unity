@@ -666,6 +666,7 @@ GameObject:
   - component: {fileID: 6023892515790766111}
   - component: {fileID: 6023892515792707297}
   - component: {fileID: 6023892515792707298}
+  - component: {fileID: 6023892515792707299}
   m_Layer: 0
   m_Name: Concrete
   m_TagString: Untagged
@@ -704,6 +705,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b373e28674db0ed4697fb3f04818bc78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6023892515792707299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023892515792707295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18581be01dff0274bbadb42e97d5d67b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &6208831963816882321
@@ -753,6 +766,10 @@ PrefabInstance:
     - target: {fileID: 3255940932356934082, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3316947968284832955, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
+      propertyPath: m_Name
+      value: RotationLeft
       objectReference: {fileID: 0}
     - target: {fileID: 5002593541015198102, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
       propertyPath: m_Pivot.x
@@ -850,6 +867,18 @@ PrefabInstance:
       propertyPath: trolley
       value: 
       objectReference: {fileID: 8658184023392465616}
+    - target: {fileID: 5045360659552153424, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
+      propertyPath: rotationAngleSpeed
+      value: 166
+      objectReference: {fileID: 0}
+    - target: {fileID: 5494010602817126061, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
+      propertyPath: m_TagString
+      value: UIHandler
+      objectReference: {fileID: 0}
+    - target: {fileID: 6427020088134837237, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
+      propertyPath: m_Name
+      value: RotationRight
+      objectReference: {fileID: 0}
     - target: {fileID: 6779775907023255500, guid: 85e1ce8fbcff6f042a34bee9779e8146, type: 3}
       propertyPath: m_Name
       value: UI
@@ -1334,7 +1363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trolley: {fileID: 8658184023392465616}
-  angleSpeed: 50
+  maxAngleSpeed: 50
 --- !u!33 &8658184023395725018
 MeshFilter:
   m_ObjectHideFlags: 0
