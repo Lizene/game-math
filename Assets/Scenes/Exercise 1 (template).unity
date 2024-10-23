@@ -1363,7 +1363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trolley: {fileID: 8658184023392465616}
-  maxAngleSpeed: 50
+  maxAngleSpeed: 20
 --- !u!33 &8658184023395725018
 MeshFilter:
   m_ObjectHideFlags: 0

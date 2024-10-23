@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class TrolleyMovement : MonoBehaviour
@@ -10,6 +11,7 @@ public class TrolleyMovement : MonoBehaviour
     float posY;
     Vector3 cranePosition, craneUpperCenter;
     Quaternion defaultOrientation = Quaternion.Euler(0, 90f, 0);
+    float goalPercentage = 1f, currentPercentage = 1f;
     void Start()
     {
         hookMovement = hook.GetComponent<HookMovement>();
@@ -30,10 +32,21 @@ public class TrolleyMovement : MonoBehaviour
         transform.rotation = defaultOrientation*Quaternion.LookRotation(craneForward);
         hookMovement.UpdateTransform(transform.position, transform.rotation);
     }
-    public void SetPosition(float percentage)
+    public void SetPercentage(float percentage)
     {
-        Vector3 fromCenterNormalized = (transform.position - craneUpperCenter).normalized;
-        transform.position = craneUpperCenter+fromCenterNormalized * Mathf.Lerp(nearRadius,farRadius, percentage);
+        goalPercentage = percentage;
+    }
+    private void Update()
+    {
+        SetPosition();
+    }
+
+    void SetPosition()
+    {
+        Vector3 posDiff = transform.position - craneUpperCenter;
+        Vector3 fromCenterNormalized = posDiff.normalized;
+        currentPercentage = Mathf.SmoothStep(currentPercentage, goalPercentage, 0.03f);
+        transform.position = craneUpperCenter + fromCenterNormalized * Mathf.Lerp(nearRadius, farRadius, currentPercentage);
         hookMovement.UpdateTransform(transform.position, transform.rotation);
     }
 }

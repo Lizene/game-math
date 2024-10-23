@@ -25,11 +25,11 @@ public class UIControlHandler : MonoBehaviour
     }
     public void SetTrolleyPos(float value)
     {
-        trolleyMovement.SetPosition(value);
+        trolleyMovement.SetPercentage(value);
     }
     public void SetCableLength(float value)
     {
-        hookMovement.SetHookHeight(1-value);
+        hookMovement.SetPercentage(1-value);
     }
     public void PerformRelocationSequence(Vector3 concretePosition)
     {
