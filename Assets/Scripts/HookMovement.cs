@@ -21,8 +21,12 @@ public class HookMovement : MonoBehaviour
     Quaternion hookDefaultOrientation, cableDefaultOrientation, hookedConcreteDefaultOrientation;
     private bool sequence3Commenced;
 
+    float liftVelocity, liftMaxSpeed = 0.17f, liftAccelerationMultiplier = 0.5f, liftAcceleration;
+    private float liftPercentage;
+
     void Start()
     {
+        liftAcceleration = liftMaxSpeed * liftAccelerationMultiplier;
         handler = GameObject.FindWithTag("UIHandler").GetComponent<UIControlHandler>();
         cableStartY = cable.transform.position.y;
         hookDefaultOrientation = transform.rotation;
@@ -56,8 +60,10 @@ public class HookMovement : MonoBehaviour
     }
     private void Update()
     {
+        Sequence4GradualLift();
         LerpHookHeight();
     }
+    
     void LerpHookHeight()
     {
         if (Mathf.Abs(currentPercentage - goalPercentage) < 0.01f)
@@ -70,8 +76,7 @@ public class HookMovement : MonoBehaviour
             }
             else if (sequence4Commenced)
             {
-                sequence4Commenced = false;
-                handler.SequenceStep5();
+                
             }
             return;
         }
@@ -101,7 +106,32 @@ public class HookMovement : MonoBehaviour
     public void SequenceStep4()
     {
         sequence4Commenced = true;
-        goalPercentage = 0;
+        liftPercentage = currentPercentage;
+        
+    }
+    void Sequence4GradualLift()
+    {
+        if (!sequence4Commenced) return;
+        if (liftVelocity < liftMaxSpeed)
+        {
+            liftVelocity += liftAcceleration * Time.deltaTime;
+            if (liftVelocity > liftMaxSpeed)
+            {
+                liftVelocity = liftMaxSpeed;
+            }
+        }
+        liftPercentage -= liftVelocity * Time.deltaTime;
+        goalPercentage = liftPercentage;
+        if (liftPercentage < 0f)
+        {
+            liftPercentage = 0f;
+            Invoke("CallSequence5", 1f);
+            sequence4Commenced = false;
+        }
+    }
+    void CallSequence5()
+    {
+        handler.SequenceStep5();
     }
     public void DetachConcrete()
     {
