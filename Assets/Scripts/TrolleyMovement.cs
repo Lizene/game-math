@@ -16,9 +16,11 @@ public class TrolleyMovement : MonoBehaviour
 
     Quaternion defaultOrientation = Quaternion.Euler(0, 90f, 0);
     float goalPercentage = 1f, currentPercentage = 1f;
-    bool sequenceCommenced;
 
-    float smoothStepT = 0.1f;
+    //Sequence2
+    bool sequence2Commenced;
+    float smoothStepT = 0, smoothStepSpeed = 0.6f;
+    float startPercentage;
 
     void Start()
     {
@@ -49,16 +51,17 @@ public class TrolleyMovement : MonoBehaviour
     }
     private void Update()
     {
+        Sequence2SmoothStep();
         LerpPosition();
     }
 
     void LerpPosition()
     {
-        if (Mathf.Abs(currentPercentage - goalPercentage) < 0.01f)
+        if (Mathf.Abs(currentPercentage - goalPercentage) < 0.001f)
         {
-            if (sequenceCommenced)
+            if (sequence2Commenced)
             {
-                sequenceCommenced = false;
+                sequence2Commenced = false;
                 handler.SequenceStep3();
             }
             return;
@@ -66,8 +69,11 @@ public class TrolleyMovement : MonoBehaviour
 
         Vector3 posDiff = transform.position - craneUpperCenter;
         Vector3 fromCenterNormalized = posDiff.normalized;
+        if (!sequence2Commenced)
+        {
+            currentPercentage = Mathf.Lerp(currentPercentage, goalPercentage, 0.005f);
 
-        currentPercentage = Mathf.Lerp(currentPercentage, goalPercentage, 0.005f);
+        }
         transform.position = craneUpperCenter + fromCenterNormalized * Mathf.Lerp(nearRadius, farRadius, currentPercentage);
         hookMovement.UpdateTransform(transform.position, transform.rotation);
 
@@ -80,7 +86,16 @@ public class TrolleyMovement : MonoBehaviour
         Vector2 concretePosition2D = new Vector2(concretePosition.x, concretePosition.z);
         float concreteDistance = (concretePosition2D-cranePosition2D).magnitude;
         float concretePercentage = Mathf.InverseLerp(nearRadius, farRadius, concreteDistance);
+        smoothStepT = 0;
+        startPercentage = currentPercentage;
         goalPercentage = concretePercentage;
-        sequenceCommenced = true;
+        sequence2Commenced = true;
+    }
+
+    void Sequence2SmoothStep()
+    {
+        if (!sequence2Commenced) return;
+        smoothStepT += smoothStepSpeed * Time.deltaTime;
+        currentPercentage = Mathf.SmoothStep(startPercentage, goalPercentage, smoothStepT);
     }
 }

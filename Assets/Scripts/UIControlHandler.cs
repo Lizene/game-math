@@ -13,10 +13,10 @@ public class UIControlHandler : MonoBehaviour
     CraneRotation craneRotation;
     TrolleyMovement trolleyMovement;
     HookMovement hookMovement;
-    Random rand;
+    static Random rand;
     void Start()
     {
-        rand = new Random(1);
+        rand = new Random((uint)DateTime.Now.Millisecond);
         craneRotation = crane.GetComponent<CraneRotation>();
         trolleyMovement = trolley.GetComponent<TrolleyMovement>();
         hookMovement = hook.GetComponent<HookMovement>();
@@ -69,11 +69,13 @@ public class UIControlHandler : MonoBehaviour
         float randomRadius = Mathf.Lerp(trolleyMovement.nearRadius,
             trolleyMovement.farRadius, rand.NextFloat());
         float randomHeight = Mathf.Lerp(10,20,rand.NextFloat());
+        Quaternion randomOrientation = Quaternion.Euler(0, rand.NextFloat() * 360f, 0);
 
         Vector2 newAngleDir2D = new Vector3(Mathf.Sin(Mathf.Deg2Rad*randomAngle), Mathf.Cos(Mathf.Deg2Rad*randomAngle));
         Vector2 crane2Dpos = craneRotation.crane2Dpos;
         Vector2 newConcrete2DPos = crane2Dpos + newAngleDir2D * randomRadius;
         concrete.transform.position = new Vector3(newConcrete2DPos.x, randomHeight, newConcrete2DPos.y);
+        concrete.transform.rotation = randomOrientation;
 
         sequenceActive = false;
     }

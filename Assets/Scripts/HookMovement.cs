@@ -15,14 +15,20 @@ public class HookMovement : MonoBehaviour
     public float attachPointHeight;
     float cableScaleRange;
     float cableStartY;
-    private bool sequence4Commenced;
     float goalPercentage = 0f, currentPercentage = 0f;
     float cableMovementRange;
     Quaternion hookDefaultOrientation, cableDefaultOrientation, hookedConcreteDefaultOrientation;
-    private bool sequence3Commenced;
 
+
+    //Sequence3
+    private bool sequence3Commenced;
+    float smoothStepT = 0, smoothStepSpeed = 0.4f;
+    float startPercentage;
+
+    //Sequence4
+    private bool sequence4Commenced;
     float liftVelocity, liftMaxSpeed = 0.17f, liftAccelerationMultiplier = 0.5f, liftAcceleration;
-    private float liftPercentage;
+    float liftPercentage;
 
     void Start()
     {
@@ -60,27 +66,27 @@ public class HookMovement : MonoBehaviour
     }
     private void Update()
     {
+        Sequence3SmoothStep();
         Sequence4GradualLift();
         LerpHookHeight();
     }
     
     void LerpHookHeight()
     {
-        if (Mathf.Abs(currentPercentage - goalPercentage) < 0.01f)
+        if (Mathf.Abs(currentPercentage - goalPercentage) < 0.001f)
         {
-            if (!handler.sequenceActive) return;
             if (sequence3Commenced)
             {
+                smoothStepT = 1f;
                 sequence3Commenced = false;
                 handler.WaitForSequenceStep4();
             }
-            else if (sequence4Commenced)
-            {
-                
-            }
             return;
         }
-        currentPercentage = Mathf.Lerp(currentPercentage, goalPercentage, 0.005f);
+        if (!sequence3Commenced)
+        {
+            currentPercentage = Mathf.Lerp(currentPercentage, goalPercentage, 0.005f);
+        }
 
         Vector3 startPos = new Vector3(transform.position.x, cableMaxHeight, transform.position.z);
         transform.position = startPos + currentPercentage * cableMovementRange * Vector3.down;
@@ -100,9 +106,17 @@ public class HookMovement : MonoBehaviour
         sequence3Commenced = true;
         float concreteHeight = handler.concretePosition.y;
         float concretePercentage = 1-Mathf.InverseLerp(cableMinHeight, cableMaxHeight, concreteHeight-attachPointHeight+0.05f);
+        smoothStepT = 0;
+        startPercentage = currentPercentage;
         goalPercentage = concretePercentage;
     }
 
+    void Sequence3SmoothStep()
+    {
+        if (!sequence3Commenced) return;
+        smoothStepT += smoothStepSpeed * Time.deltaTime;
+        currentPercentage = Mathf.SmoothStep(startPercentage, goalPercentage, smoothStepT);
+    }
     public void SequenceStep4()
     {
         sequence4Commenced = true;
@@ -125,6 +139,7 @@ public class HookMovement : MonoBehaviour
         if (liftPercentage < 0f)
         {
             liftPercentage = 0f;
+            goalPercentage = liftPercentage;
             Invoke("CallSequence5", 1f);
             sequence4Commenced = false;
         }
